@@ -1,6 +1,0 @@
-Thêm task bằng input
-Chọn 1 hoặc nhiều task
-Xóa 1 hoặc tất cả task
-Lọc: Xem tất cả, đã hoàn thành, chưa hoàn thành
-Hiển thị số task chưa làm
-Click đôi để sửa task
