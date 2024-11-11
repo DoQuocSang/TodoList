@@ -1,0 +1,65 @@
+<div class="flex flex-col justify-center gap-4 my-8">
+  <form>
+    <input
+      type="text"
+      name="main-input"
+      class="px-4 py-4 rounded-lg shadow-lg w-full focus:ring-2 focus:ring-red-500 border-none transition-all duration-150 ease-in"
+      placeholder="Create new task..."
+      [(ngModel)]="InputTodo"
+      (keyup.enter)="createNewItem()"
+    />
+  </form>
+
+  <div
+    *ngIf="TodoList.length > 0"
+    class="w-full bg-white shadow-lg rounded-lg p-4 border-b-4 border-red-500"
+  >
+    <app-todo-item
+      [TodoItem]="item"
+      *ngFor="let item of getTotoListByTab(CurrentTab)"
+      (deleteFunction)="deleteItem(item.id)"
+      (updateFunction)="updateItem(item)"
+    ></app-todo-item>
+
+    <div class="flex items-center justify-between pt-4">
+      <p class="text-sm flex justify-center items-center gap-2">
+        <span class="text-red-500 font-bold text-xl">
+          {{ getItemsLeft() }}
+        </span>
+        item left
+      </p>
+
+      <div class="space-x-2">
+        <button
+          (click)="changeCurrentTab('all')"
+          class="text-sm text-slate-700 rounded-lg hover:text-white hover:bg-red-500 px-2 py-1 transition-all duration-150 ease-in"
+        >
+          All
+        </button>
+        <button
+          (click)="changeCurrentTab('active')"
+          class="text-sm text-slate-700 rounded-lg hover:text-white hover:bg-gray-500 px-2 py-1 transition-all duration-150 ease-in"
+        >
+          Active
+        </button>
+        <button
+          (click)="changeCurrentTab('completed')"
+          class="text-sm text-slate-700 rounded-lg hover:text-white hover:bg-emerald-500 px-2 py-1 transition-all duration-150 ease-in"
+        >
+          Completed
+        </button>
+      </div>
+
+      <button
+        (click)="deleteAllCheckedItems()"
+        [class]="
+          checkCompletedItems()
+            ? 'text-sm text-slate-700 rounded-lg hover:text-white hover:bg-red-500 px-2 py-1 transition-all duration-150 ease-in'
+            : 'invisible'
+        "
+      >
+        Clear Completed
+      </button>
+    </div>
+  </div>
+</div>
