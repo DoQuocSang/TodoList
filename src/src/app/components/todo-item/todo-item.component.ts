@@ -5,32 +5,40 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { Todo } from '../../models/todo';
 
 @Component({
   selector: 'app-todo-item',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './todo-item.component.html',
 })
 export class TodoItemComponent {
   @Input({ required: true }) TodoItem!: Todo;
-  @Output("deleteFunction") deleteItemEvent = new EventEmitter<string>();
-  @Output("updateFunction") updateItemEvent = new EventEmitter<string>();
+  @Output('deleteFunction') deleteItemEvent = new EventEmitter<string>(); // delete by id
+  @Output('updateFunction') updateItemEvent = new EventEmitter<Todo>(); // update by obj
 
   editable: boolean = false;
+  inputName: string = '';
 
-  DeleteItem() {
+  ngOnInit(): void {
+    this.inputName = this.TodoItem.name;
+  }
+
+  deleteItem() {
     this.deleteItemEvent.emit(this.TodoItem.id);
   }
 
-  ToggleEdit() {
+  toggleEdit() {
     this.editable = !this.editable;
   }
 
-  UpdateItem() {
-    this.ToggleEdit();
-    this.updateItemEvent.emit(this.TodoItem.id);
+  updateItem() {
+    // console.log((e.target as HTMLParagraphElement).textContent);
+    this.toggleEdit();
+    this.TodoItem.name = this.inputName;
+    this.updateItemEvent.emit(this.TodoItem);
   }
 }
