@@ -5,9 +5,9 @@
     *ngIf="!editable"
     name=""
     type="checkbox"
-    [checked]="TodoItem.status"
-    (change)="TodoItem.status = !TodoItem.status"
-    [id]="TodoItem.id"
+    [checked]="todoList.status"
+    (change)="todoList.status = !todoList.status"
+    [id]="todoList.id"
     class="focus:line-through cursor-pointer w-5 h-5 bg-red-100 rounded border-none focus:ring-0 focus:ring-transparent text-emerald-500 transition-all duration-150 ease-in-out"
   />
 
@@ -16,7 +16,7 @@
     class="flex-1 select-none font-semibold text-lg"
     (dblclick)="toggleEdit()"
   >
-    {{ TodoItem.name }}
+    {{ todoList.name }}
   </p>
 
   <input
