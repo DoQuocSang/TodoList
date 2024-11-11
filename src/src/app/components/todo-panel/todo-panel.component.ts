@@ -1,90 +1,113 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { loremIpsum } from 'lorem-ipsum';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Tab } from '../../models/tab';
 import { Todo } from '../../models/todo';
-import { TodoItemComponent } from '../todo-item/todo-item.component';
+import { TodoListComponent } from '../todo-item/todo-item.component';
 
 @Component({
   selector: 'app-todo-panel',
   standalone: true,
-  imports: [TodoItemComponent, CommonModule, FormsModule],
+  imports: [TodoListComponent, CommonModule, FormsModule],
   templateUrl: './todo-panel.component.html',
 })
-export class TodoPanelComponent {
-  TodoList: Todo[] = [];
-  InputTodo: string = '';
-  CurrentTab: string = 'all';
+export class TodoPanelComponent implements OnChanges {
+  @Input({ required: true }) todoList!: Todo[];
+  @Output() todoListChange = new EventEmitter<Todo[]>();
+  inputTodo: string = '';
+  currentTab: string = 'all';
 
-  ngOnInit(): void {
-    for (let i = 0; i < 8; i++) {
-      this.TodoList.push({
-        id: uuidv4(),
-        name: loremIpsum(),
-        status: i % 2 === 0,
-      });
-    }
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
   }
 
-  getItemsLeft() {
-    return this.TodoList.filter((item) => !item.status).length;
+  getNumberItemsLeft() {
+    return this.todoList.filter((item) => !item.status).length;
+  }
+
+  getNumberItemsCompleted() {
+    return this.todoList.filter((item) => item.status).length;
   }
 
   checkCompletedItems() {
-    return this.TodoList.filter((item) => item.status).length > 0;
+    return this.todoList.filter((item) => item.status).length > 0;
   }
 
-  changeCurrentTab(tab: string) {
-    this.CurrentTab = tab.trim().toLocaleLowerCase();
+  changecurrentTab(tab: string) {
+    this.currentTab = tab.trim().toLocaleLowerCase();
   }
 
   getTotoListByTab(tab: string) {
     switch (tab) {
       case Tab.Completed: {
-        return this.TodoList.filter((item) => item.status);
+        return this.todoList.filter((item) => item.status);
       }
       case Tab.Active: {
-        return this.TodoList.filter((item) => !item.status);
+        return this.todoList.filter((item) => !item.status);
       }
       case Tab.All: {
-        return this.TodoList;
+        return this.todoList;
       }
       default: {
-        return this.TodoList;
+        return this.todoList;
       }
     }
   }
 
+  completeAllItems() {
+    if (
+      this.getNumberItemsCompleted() === 0 ||
+      this.getNumberItemsLeft() === 0
+    ) {
+      this.todoList.forEach((item) => {
+        item.status = !item.status;
+      });
+    } else {
+      this.todoList
+        .filter((item) => !item.status)
+        .forEach((item) => {
+          item.status = !item.status;
+        });
+    }
+  }
+
   createNewItem() {
-    this.TodoList.push({
+    this.todoList.push({
       id: uuidv4(),
-      name: this.InputTodo,
+      name: this.inputTodo,
       status: false,
     });
 
-    this.InputTodo = '';
+    this.inputTodo = '';
   }
 
   deleteItem(id: string) {
-    const deleteIndex = this.TodoList.map((item) => item.id).indexOf(id);
-    this.TodoList.splice(deleteIndex, 1);
+    const deleteIndex = this.todoList.map((item) => item.id).indexOf(id);
+    this.todoList.splice(deleteIndex, 1);
   }
 
   updateItem(updateValue: Todo) {
-    const index = this.TodoList.findIndex((item) => item.id === updateValue.id);
-    this.TodoList[index] = updateValue;
+    const index = this.todoList.findIndex((item) => item.id === updateValue.id);
+    this.todoList[index] = updateValue;
   }
 
   deleteAllCheckedItems() {
-    this.TodoList = this.TodoList.filter((item) => !item.status);
+    this.todoList = this.todoList.filter((item) => !item.status);
+    this.todoListChange.emit(this.todoList);
   }
 
   toggleAllActiveItems() {
-    this.TodoList = this.TodoList.filter((item) => !item.status);
+    this.todoList = this.todoList.filter((item) => !item.status);
   }
 
   addItem() {}
