@@ -5,30 +5,31 @@
     *ngIf="!editable"
     name=""
     type="checkbox"
-    [checked]="todoList.status"
-    (change)="todoList.status = !todoList.status"
-    [id]="todoList.id"
+    [checked]="todoItem.status"
+    (change)="todoItem.status = !todoItem.status"
+    [id]="todoItem.id"
     class="focus:line-through cursor-pointer w-5 h-5 bg-red-100 rounded border-none focus:ring-0 focus:ring-transparent text-emerald-500 transition-all duration-150 ease-in-out"
   />
 
   <p
     *ngIf="!editable"
     class="flex-1 select-none font-semibold text-lg"
+    [ngClass]="todoItem.status ? 'line-through' : ''"
     (dblclick)="toggleEdit()"
   >
-    {{ todoList.name }}
+    {{ todoItem.name }}
   </p>
 
   <input
     *ngIf="editable"
-    (keyup.enter)="updateItem()"
+    (keyup.enter)="handleUpdateItem()"
     [(ngModel)]="inputName"
     class="flex-1 font-semibold text-base px-4 py-2 border-2 border-teal-500 rounded-lg focus:outline-none focus:border-teal-500 transition-all duration-150 ease-in-out"
   />
 
   <button
     *ngIf="!editable"
-    (click)="deleteItem()"
+    (click)="handleDeleteItem()"
     class="absolute top-1/2 right-0 group-hover:right-4 -translate-y-1/2 text-red-500 opacity-0 group-hover:opacity-100 transition duration-150 ease-in-out"
   >
     <svg

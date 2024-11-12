@@ -1,15 +1,9 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Todo } from '../../models/todo';
+import { TodoService } from '../../services/todo.service';
 
 @Component({
   selector: 'app-todo-item',
@@ -17,34 +11,32 @@ import { Todo } from '../../models/todo';
   imports: [CommonModule, FormsModule],
   templateUrl: './todo-item.component.html',
 })
-export class TodoListComponent implements OnChanges {
-  @Input({ required: true }) todoList!: Todo;
-  @Output('deleteFunction') deleteItemEvent = new EventEmitter<string>(); // delete by id
-  @Output('updateFunction') updateItemEvent = new EventEmitter<Todo>(); // update by obj
+export class TodoItemComponent {
+  @Input({ required: true }) todoItem!: Todo;
+  // @Output('deleteFunction') deleteItemEvent = new EventEmitter<string>(); // delete by id
+  // @Output('updateFunction') updateItemEvent = new EventEmitter<Todo>(); // update by obj
 
   editable: boolean = false;
   inputName: string = '';
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-  }
+  todoService: TodoService = inject(TodoService);
 
   ngOnInit(): void {
-    this.inputName = this.todoList.name;
-  }
-
-  deleteItem() {
-    this.deleteItemEvent.emit(this.todoList.id);
+    this.inputName = this.todoItem.name;
   }
 
   toggleEdit() {
     this.editable = !this.editable;
   }
 
-  updateItem() {
+  handleUpdateItem() {
     // console.log((e.target as HTMLParagraphElement).textContent);
     this.toggleEdit();
-    this.todoList.name = this.inputName;
-    this.updateItemEvent.emit(this.todoList);
+    this.todoItem.name = this.inputName;
+    this.todoService.updateItem(this.todoItem);
+  }
+
+  handleDeleteItem() {
+    this.todoService.deleteItem(this.todoItem.id);
   }
 }
