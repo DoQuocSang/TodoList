@@ -22,7 +22,7 @@ export class TodoPanelComponent {
 
   todoService: TodoService = inject(TodoService);
 
-  constructor(private todoservice: TodoService) {
+  constructor() {
     this.todoList = this.todoService.getTodoList();
   }
 
