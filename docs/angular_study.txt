@@ -1,0 +1,16 @@
+- Dependency Injection là mâu thiết kế cho việc tạo và cung cấp một vài phần của chương trình cho các thành phần khác yêu cầu chúng
+- Dependency có thể là service*, giá trị, chuỗi hoặc hàm 
+- Có hai phần chính: Dependency Consumer và Dependency Provider. Tương tác qua 1 abstract là Injector
+- Khi 1 dependency được yêu cầu, Injector sẽ kiểm tra trong registry có instance nào hay chưa, nếu chưa, 1 instance mới sẽ được tạo ra và lưu vào registry
+- ProviderIn cho phép code optimizer Angular và JS loại bỏ những service ko được sử dụng
+- Root level: Angulả chỉ tạo ra 1 instance và chia sẽ nó giữa các clas cần nó
+- Cách thông thường để inject 1 dependency là khai báo nó trong hàm khởi tạo của class. Khi Angular tạo 1 instance mới từ 1 component, directive hoặc pipe class nó sẽ xác địch service hoặc dependency nào mà class cần bằng cách nhìn vào kiểu tham số của hàm
+- Khi Angular phát hiện ra rằng 1 component dựa vào 1 service, đầu tiên nó sẽ kiểm tra injector có instance nào của service đã tồn tại hay chưa. Nếu instance của service được yêu cầu chưa tồn tại thì injector sẽ tạo instance thông qua provider đã được đăng ký và thêm nó vào injector trước khi trả về service cho Angular
+---------------------------------------------
+- Service là một phạm trù bao gồm bất kỳ giá trị, hàm hoặc tính năng nào mà một ứng dụng cần. Dịch vụ thường là một lớp có mục đích hẹp, được xác định rõ ràng. 
+- Component là một loại class có thể sử dụng DI
+- 1 Component chỉ nên chứa các thuộc tính và phương thức cho việc binding dữ liệu. Các tác vụ và tiến trình khác nên ủy quyền cho service (fetching data, validate,...)
+- @Injectable() chỉ ra rằng Angular có thể sử dụng clas này trong hệ thống DI. 
+- providedIn: 'root', có nghĩa là service này được cung cấp trong toàn bộ ứng dụng.
+-----------------------------
+- useClass xác định Angulả DI sẽ dùng clas nào để khởi tạo và trả về instance
