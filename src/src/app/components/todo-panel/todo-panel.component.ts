@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Todo } from '../../models/todo';
 import { TodoService } from '../../services/todo.service';
-import { TodoListComponent } from '../todo-item/todo-item.component';
+import { TodoItemComponent } from '../todo-item/todo-item.component';
 
 @Component({
   selector: 'app-todo-panel',
   standalone: true,
-  imports: [TodoListComponent, CommonModule, FormsModule],
+  imports: [TodoItemComponent, CommonModule, FormsModule],
   templateUrl: './todo-panel.component.html',
 })
-export class TodoPanelComponent implements OnChanges {
+export class TodoPanelComponent {
   // @Input({ required: true }) todoList!: Todo[];
   // @Output() todoListChange = new EventEmitter<Todo[]>();
 
@@ -24,10 +24,6 @@ export class TodoPanelComponent implements OnChanges {
 
   constructor(private todoservice: TodoService) {
     this.todoList = this.todoService.getTodoList();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
   }
 
   changecurrentTab(tab: string) {

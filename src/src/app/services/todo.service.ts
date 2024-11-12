@@ -77,6 +77,10 @@ export class TodoService {
   }
 
   createNewItem(input: string) {
+    if (input === '') {
+      return;
+    }
+
     this.todoList.push({
       id: uuidv4(),
       name: input,

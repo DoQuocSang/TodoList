@@ -35,7 +35,7 @@
     class="w-full bg-white shadow-lg rounded-lg p-4 border-b-4 border-red-500"
   >
     <app-todo-item
-      [todoList]="item"
+      [todoItem]="item"
       *ngFor="let item of todoService.getTotoListByTab(currentTab)"
       (deleteFunction)="todoService.deleteItem(item.id)"
       (updateFunction)="todoService.updateItem(item)"
