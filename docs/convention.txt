@@ -1,0 +1,7 @@
+- _name cho những biến private
+- name$ cho observable
+- camelCase cho tên biến, hàm, thuộc tính
+- PascalCase cho component
+- NAME_NAME cho hằng số
+- Luôn luôn có {} đối với hàm
+- Tên hàm bắt đầu bằng 1 hành động
