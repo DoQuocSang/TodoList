@@ -5,8 +5,8 @@
     *ngIf="!editable"
     name=""
     type="checkbox"
-    [checked]="todoItem.status"
-    (change)="todoItem.status = !todoItem.status"
+    [checked]="todoItem.completed"
+    (change)="todoItem.completed = !todoItem.completed"
     [id]="todoItem.id"
     class="focus:line-through cursor-pointer w-5 h-5 bg-red-100 rounded border-none focus:ring-0 focus:ring-transparent text-emerald-500 transition-all duration-150 ease-in-out"
   />
@@ -14,10 +14,10 @@
   <p
     *ngIf="!editable"
     class="flex-1 select-none font-semibold text-lg text-slate-600 transition-all duration-150 ease-in-out"
-    [ngClass]="todoItem.status ? 'line-through text-slate-400' : ''"
+    [ngClass]="todoItem.completed ? 'line-through text-slate-400' : ''"
     (dblclick)="toggleEdit()"
   >
-    {{ todoItem.name }}
+    {{ todoItem.title }}
   </p>
 
   <input

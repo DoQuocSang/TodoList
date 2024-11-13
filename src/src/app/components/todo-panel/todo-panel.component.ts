@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  inject,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Todo } from '../../models/todo';
@@ -24,6 +27,10 @@ export class TodoPanelComponent {
 
   constructor() {
     this.todoList = this.todoService.getTodoList();
+  }
+
+  ngOnInit() {
+    this.todoService.loadData();
   }
 
   changecurrentTab(tab: string) {

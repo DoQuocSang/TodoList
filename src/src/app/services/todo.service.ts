@@ -1,4 +1,8 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import {
+  inject,
+  Injectable,
+} from '@angular/core';
 
 import { loremIpsum } from 'lorem-ipsum';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,14 +16,29 @@ import { Todo } from '../models/todo';
 export class TodoService {
   todoList: Todo[] = [];
 
+  http: HttpClient = inject(HttpClient);
+  limit: number = 0;
+
   constructor() {
+    this.limit = 10;
     for (let i = 0; i < 8; i++) {
       this.todoList.push({
         id: uuidv4(),
-        name: loremIpsum(),
-        status: i % 2 === 0,
+        title: loremIpsum(),
+        completed: i % 2 === 0,
       });
     }
+  }
+
+  loadData() {
+    this.http
+      .get<Todo[]>('https://jsonplaceholder.typicode.com/todos', {
+        params: { _limit: this.limit },
+      })
+      .subscribe((data) => {
+        // console.log(data);
+        this.todoList = data;
+      });
   }
 
   getTodoList(): Todo[] {
@@ -31,24 +50,24 @@ export class TodoService {
   }
 
   getNumberItemsLeft() {
-    return this.todoList.filter((item) => !item.status).length;
+    return this.todoList.filter((item) => !item.completed).length;
   }
 
   getNumberItemsCompleted() {
-    return this.todoList.filter((item) => item.status).length;
+    return this.todoList.filter((item) => item.completed).length;
   }
 
   checkCompletedItems() {
-    return this.todoList.filter((item) => item.status).length > 0;
+    return this.todoList.filter((item) => item.completed).length > 0;
   }
 
   getTotoListByTab(tab: string) {
     switch (tab) {
       case Tab.Completed: {
-        return this.todoList.filter((item) => item.status);
+        return this.todoList.filter((item) => item.completed);
       }
       case Tab.Active: {
-        return this.todoList.filter((item) => !item.status);
+        return this.todoList.filter((item) => !item.completed);
       }
       case Tab.All: {
         return this.todoList;
@@ -65,13 +84,13 @@ export class TodoService {
       this.getNumberItemsLeft() === 0
     ) {
       this.todoList.forEach((item) => {
-        item.status = !item.status;
+        item.completed = !item.completed;
       });
     } else {
       this.todoList
-        .filter((item) => !item.status)
+        .filter((item) => !item.completed)
         .forEach((item) => {
-          item.status = !item.status;
+          item.completed = !item.completed;
         });
     }
   }
@@ -81,11 +100,26 @@ export class TodoService {
       return;
     }
 
-    this.todoList.push({
-      id: uuidv4(),
-      name: input,
-      status: false,
-    });
+    // this.todoList.push({
+    //   id: uuidv4(),
+    //   title: input,
+    //   completed: false,
+    // });
+
+    this.http
+      .post<Todo>('https://jsonplaceholder.typicode.com/todos', {
+        id: uuidv4(),
+        title: input,
+        completed: false,
+      })
+      .subscribe(
+        (data) => {
+          console.log('Create item successfully!', data);
+        },
+        (error) => {
+          console.error('Error create item', error);
+        }
+      );
   }
 
   deleteItem(id: string) {
@@ -99,6 +133,6 @@ export class TodoService {
   }
 
   deleteAllCheckedItems() {
-    this.todoList = this.todoList.filter((item) => !item.status);
+    this.todoList = this.todoList.filter((item) => !item.completed);
   }
 }
