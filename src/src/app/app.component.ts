@@ -3,7 +3,9 @@ import { RouterOutlet } from '@angular/router';
 
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
-import { TodoPanelComponent } from './components/todo-panel/todo-panel.component';
+import {
+  TodoPanelComponent,
+} from './components/todo-panel/todo-panel.component';
 
 @Component({
   selector: 'app-root',
