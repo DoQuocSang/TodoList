@@ -1,0 +1,64 @@
+- Pull và Push là 2 giao thức mô tả cách thức Data Producer và Data Consumer liên lạc với nhau
+- Đối với Pull, DC xác định khi nào nó nhận dữ liệu từ DP nhưng DP ko thể biết khi nào DC nhận dữ liệu
+VD Hàm trong JS là 1 Pull system
+- Push ngược lại với Pull
+VD Promise là 1 Push system
+
+* Nguồn khác
+- Observable có thể coi là một Array của các value theo thời gian
+- Observer là một tập hợp các callbacks tương ứng cho việc lắng nghe các giá trị (next, error, hay complete) được gửi đến bởi Observable.
+
+* Nguồn chính
+- Observable là một đối tượng đại diện cho dòng dữ liệu có thể phát sinh theo thời gian.
+- Observer là một đối tượng chứa các hàm callback (tối đa 1 cho mỗi loại notification), dùng để xử lý các giá trị mà Observable phát ra
+
+- Next trả về 1 giá trị
+- Error trả về 1 JS Error hoặc exception
+- Complete ko trả về giá trị
+
+- N, E, C phải tuân theo thứ tự vì có thể có nhiều N nhưng khi E, C được thực thi thì mọi câu lệnh ở sau đều ko được thực thi
+
+** So sánh: Obsrvable và Promises đều được sử dụng để xử lý các yêu cầu không đồng bộ, nhưng chúng có những khác biệt quan trọng:
+- Obsrvable phức tạp hơn Promises vì bạn phải đăng ký Obsrvable để nhận kết quả, trong khi Promises có thể thực hiện ngay lập tức mà không cần đăng ký.
+- Obsrvable có thể cung cấp nhiều giá trị trong khi Promises chỉ cung cấp một giá trị duy nhất.
+- Bạn có thể hủy bỏ Obsrvable bằng cách hủy đăng ký, trong khi Promises không hỗ trợ tính năng này.
+- Obsrvable cung cấp nhiều operators như map, forEach, filter,… trong khi Promises không có tính năng này.
+
+- Lazy nghĩa là các đoạn code ko được thực thi cho đến khi cần thiết (khai báo hàm và gọi hàm, lazyload chỉ load 1 phần)
+
+-------------------------------------------------------------------------
+- Observable là 1 đối tượng đại diện cho 1 luồng dữ liệu
++ next dùng để phát ra 1 giá trị từ observable
++ complete dùng để báo hiệu điểm kết thúc của dòng dữ liệu
+
+- Khi khai báo observable cần truyền vào 1 hàm để xác định cách mà dữ liệu sẽ phát ra
+- Observable không giữ trạng thái, tức là khi có người đăng ký (subscriber), nó chỉ phát dữ liệu hiện tại và không lưu trữ bất kỳ giá trị nào trước đó
+- Mỗi khi một Observable được subscribe, một luồng mới sẽ bắt đầu và dữ liệu sẽ được phát từ đầu
+
+- Subscribe dùng để đăng ký 1 observer vào 1 observable (dùng để yêu cầu observable phát ra dữ liệu của nó, lúc này hàm đã khai báo trong observable mới thực sự được thực thi)
++ next dùng để xử lý mỗi giá trị mà observable phát ra
++ error được gọi mỗi khi có sự cố trong luồng dữ liệu
++ complete dùng để báo hiệu điểm kết thúc của dòng dữ liệu 
+
+** Next trong subscribe và tap trong pipe 
+- Next là nơi mà ta thực sự làm việc với dữ liệu từu observable, sẽ dùng khi muốn thực hiện các hành động sau khi nhận dữ liệu
+- Tap dùng để chạy các tác vụ phụ trước khi được xử lý trong next (cập nhật giao diện, gửi yêu cầu HTTP, thay đổi trạng thái)
+
+- Pipe được dùng để xử lý dữ liệu từ observable, hình dung nó giống như 1 dây chuyển sản xuất thực hiện xử lý các đối tượng từ nguồn observable
+- Dễ hiểu hơn: pipe là một phương thức trong RxJS được sử dụng để áp dụng các toán tử lên Observable.
+
+- Tap là một toán tử có thể dùng trong observable, dùng cho những tác vụ ko làm thay đổi nguồn dữ liệu
+- Mặc dù tap không làm thay đổi dữ liệu, nhưng nó có thể được sử dụng để gọi hàm để cập nhật state
+
+- Subject là một dạng đặc biệt của observable, có thể truyền dữ liệu đến nhiều observer cùng lúc, đảm bảo các observer chia sẻ cùng 1 nguòn dữ liệu
+- Subject không lưu trữ giá trị. Điều này có nghĩa là nếu một subscriber đăng ký sau khi Subject đã phát giá trị, họ sẽ không nhận được bất kỳ giá trị nào đã phát ra trước đó.
+
+- BehaviorSubject là một loại Subject đặc biệt, có khả năng lưu trữ giá trị mới nhất và phát giá trị đó cho những người đăng ký mới ngay lập tức khi họ subscribe.
+- BehaviorSubject luôn giữ một giá trị nội bộ, và khi có người đăng ký, họ sẽ nhận ngay giá trị mới nhất (nếu có).
+- Cần cung cấp một giá trị khởi tạo khi tạo BehaviorSubject.
+
+- Đối với Behavior Subject các value là read only (ko thể ghi đè giá trị cũ) vì vậy cần dùng .next để phát ra giá trị mới 
+
+- asObservable dùng để trả về 1 observable để các thành phần khác ko thể thay đổi dữ liệu trực tiếp (dùng cho subject và behavior subject)
+
+- obs_name | async là một pipe đặc biệt dùng để subscribe vào một Observable và tự động cập nhật giá trị khi Observable phát ra giá trị mới.

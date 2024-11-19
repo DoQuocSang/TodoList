@@ -1,5 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Todo } from '../../models/todo';
@@ -22,7 +26,7 @@ export class TodoItemComponent {
   todoService: TodoService = inject(TodoService);
 
   ngOnInit(): void {
-    this.inputName = this.todoItem.name;
+    this.inputName = this.todoItem.title;
   }
 
   toggleEdit() {
@@ -32,7 +36,7 @@ export class TodoItemComponent {
   handleUpdateItem() {
     // console.log((e.target as HTMLParagraphElement).textContent);
     this.toggleEdit();
-    this.todoItem.name = this.inputName;
+    this.todoItem.title = this.inputName;
     this.todoService.updateItem(this.todoItem);
   }
 

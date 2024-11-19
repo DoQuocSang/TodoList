@@ -5,19 +5,36 @@
     *ngIf="!editable"
     name=""
     type="checkbox"
-    [checked]="todoItem.status"
-    (change)="todoItem.status = !todoItem.status"
+    [checked]="todoItem.completed"
+    (change)="todoItem.completed = !todoItem.completed"
     [id]="todoItem.id"
-    class="focus:line-through cursor-pointer w-5 h-5 bg-red-100 rounded border-none focus:ring-0 focus:ring-transparent text-emerald-500 transition-all duration-150 ease-in-out"
+    class="relative peer forced-colors:appearance-auto appearance-none cursor-pointer w-5 h-5 bg-red-100 rounded border-none focus:ring-0 focus:ring-transparent checked:bg-emerald-500 transition-all duration-150 ease-in-out"
   />
+
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="3"
+    stroke="currentColor"
+    class="size-5 hidden peer-checked:block absolute text-white pointer-events-none"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="m4.5 12.75 6 6 9-13.5"
+    />
+  </svg>
 
   <p
     *ngIf="!editable"
-    class="flex-1 select-none font-semibold text-lg text-slate-600 transition-all duration-150 ease-in-out"
-    [ngClass]="todoItem.status ? 'line-through text-slate-400' : ''"
+    class="flex-1 select-none font-semibold text-lg transition-all duration-150 ease-in-out"
+    [ngClass]="
+      todoItem.completed ? 'line-through text-slate-400' : 'text-slate-600'
+    "
     (dblclick)="toggleEdit()"
   >
-    {{ todoItem.name }}
+    {{ todoItem.title }}
   </p>
 
   <input

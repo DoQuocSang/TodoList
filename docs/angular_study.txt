@@ -13,4 +13,14 @@
 - @Injectable() chỉ ra rằng Angular có thể sử dụng clas này trong hệ thống DI. 
 - providedIn: 'root', có nghĩa là service này được cung cấp trong toàn bộ ứng dụng.
 -----------------------------
-- useClass xác định Angulả DI sẽ dùng clas nào để khởi tạo và trả về instance
+- useClass xác định Angular DI sẽ dùng clas nào để khởi tạo và trả về instance
+--------------------------------
+- Theo mặc định HttpResponse chỉ trả về response body
+- 2 lỗi khiến HTTP request fail: Lỗi kết nối và lỗi ở phá backend
+- Error code do kết nối mạng là 0, do backend là 1 số tự thiết lập
+- HttpClient trả về 1 cold observable (ngĩa là ko có request thật sự nào xảy ra cho tới khi observable được đăng ký)
+- Một khi đã subrice, unsubrice sẽ hủy bỏ resquest đang tiến hành, có ích cho việc bất đồng bộ bởi vì nó sẽ tự hủy bỏ request nếu người dùng chuyển trang
+
+- Interceptor thường là các hàm có thể chạy cho mỗi yêu cầu và có thể ảnh hưởng đến nội dung và luồng yêu cầu và phản hồi tổng thể. Có thể cài đặt nhiều interceptor, tạo thành một chuỗi interceptor trong đó mỗi interceptor xử lý yêu cầu hoặc phản hồi trước khi chuyển tiếp đến interceptor tiếp theo trong chuỗi.
+- Có 2 dạng Interceptor: funtional (nên dùng vì nó có những hành vi dễ dự đoán) và DI-based
+- Hầu hết HttpRequest và HttpResponse là bất biến và Interceptor cũng ko thể thay đổi trực dtiếp chúng. Vì vậy cần dùng .clone() để chỉnh sửa chúng
