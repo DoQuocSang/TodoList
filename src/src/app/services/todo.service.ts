@@ -1,28 +1,41 @@
 import { HttpClient } from '@angular/common/http';
-import {
-  inject,
-  Injectable,
-} from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { loremIpsum } from 'lorem-ipsum';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Tab } from '../models/tab';
 import { Todo } from '../models/todo';
+
+type State = {
+  items: Todo[];
+  filterType: Tab;
+};
+
+const initialState = {
+  items: [],
+  filterType: Tab.All,
+};
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoService {
   todoList: Todo[] = [];
-
   http: HttpClient = inject(HttpClient);
   limit: number = 0;
+
+  private _state: BehaviorSubject<State> = new BehaviorSubject<State>(
+    initialState
+  );
+
+  state$: Observable<State> = this._state.asObservable();
 
   constructor() {
     this.limit = 10;
     for (let i = 0; i < 8; i++) {
-      this.todoList.push({
+      this._state.value.items.push({
         id: uuidv4(),
         title: loremIpsum(),
         completed: i % 2 === 0,
@@ -37,12 +50,12 @@ export class TodoService {
       })
       .subscribe((data) => {
         // console.log(data);
-        this.todoList = data;
+        this._state.value.items = data;
       });
   }
 
   getTodoList(): Todo[] {
-    return this.todoList;
+    return this._state.value.items;
   }
 
   isEmptyTodoList(): boolean {
