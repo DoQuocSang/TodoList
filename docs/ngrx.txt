@@ -1,0 +1,18 @@
+-----------------------------------------------
+|| Lý do có thể sử dụng biến trước khi khai báo
+-----------------------------------------------
+- Khi Angular khởi tạo Component, nó phát hiện rằng component có một dependency là MoviesStore (do được khai báo trong constructor).
+- Angular kiểm tra trong providers của component (hoặc module cấp cao hơn) để tìm một "provider" của MoviesStore.
+- Tìm thấy MoviesStore trong providers, Angular tạo instance mới (nếu chưa có) và truyền vào constructor của Component.
+-----------------------------------------------
+|| Tại sao chỉ truyền tham số trong constructor mà không có câu lệnh khởi tạo?
+-----------------------------------------------
+- Không cần câu lệnh khởi tạo vì Dependency Injection tự động thực hiện việc này.
+- Angular DI sẽ truyền instance của MoviesStore vào tham số moviesStore.
+
+-----------------------------------------------
+|| Main
+-----------------------------------------------
+- debounce dùng để trì hoãn sự phát ra giá trị mới từ observable.
+- Giá trị chỉ được phát sau một thời gian ngừng thay đổi, thay vì mỗi khi có sự thay đổi.
+- effect dùng để thực hiện các tác vụ phụ, các tác vụ này thường là các hành động không liên quan trực tiếp đến việc thay đổi trạng thái của store mà cần phải thực thi khi có sự thay đổi trong state hoặc khi có sự kiện từ observables.

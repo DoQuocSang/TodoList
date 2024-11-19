@@ -45,7 +45,10 @@ VD Promise là 1 Push system
 - Tap dùng để chạy các tác vụ phụ trước khi được xử lý trong next (cập nhật giao diện, gửi yêu cầu HTTP, thay đổi trạng thái)
 
 - Pipe được dùng để xử lý dữ liệu từ observable, hình dung nó giống như 1 dây chuyển sản xuất thực hiện xử lý các đối tượng từ nguồn observable
+- Dễ hiểu hơn: pipe là một phương thức trong RxJS được sử dụng để áp dụng các toán tử lên Observable.
+
 - Tap là một toán tử có thể dùng trong observable, dùng cho những tác vụ ko làm thay đổi nguồn dữ liệu
+- Mặc dù tap không làm thay đổi dữ liệu, nhưng nó có thể được sử dụng để gọi hàm để cập nhật state
 
 - Subject là một dạng đặc biệt của observable, có thể truyền dữ liệu đến nhiều observer cùng lúc, đảm bảo các observer chia sẻ cùng 1 nguòn dữ liệu
 - Subject không lưu trữ giá trị. Điều này có nghĩa là nếu một subscriber đăng ký sau khi Subject đã phát giá trị, họ sẽ không nhận được bất kỳ giá trị nào đã phát ra trước đó.
