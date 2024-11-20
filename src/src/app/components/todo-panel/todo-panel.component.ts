@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  inject,
-} from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { Observable } from 'rxjs';
+
+import { Tab } from '../../models/tab';
 import { Todo } from '../../models/todo';
 import { TodoService } from '../../services/todo.service';
 import { TodoItemComponent } from '../todo-item/todo-item.component';
@@ -19,22 +19,21 @@ export class TodoPanelComponent {
   // @Input({ required: true }) todoList!: Todo[];
   // @Output() todoListChange = new EventEmitter<Todo[]>();
 
-  todoList: Todo[] = [];
   inputTodo: string = '';
-  currentTab: string = 'all';
 
   todoService: TodoService = inject(TodoService);
-
-  constructor() {
-    this.todoList = this.todoService.getTodoList();
-  }
+  filteredItems$: Observable<Todo[]> = this.todoService.filteredItems$;
 
   ngOnInit() {
     this.todoService.loadData();
   }
 
-  changecurrentTab(tab: string) {
-    this.currentTab = tab.trim().toLocaleLowerCase();
+  // get filteredItems() {
+  //   return this.todoService.filteredItems;
+  // }
+
+  changeCurrentTab(filterType: Tab) {
+    this.todoService.setTabFilter(filterType);
   }
 
   handleCreateItem() {

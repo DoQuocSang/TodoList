@@ -56,6 +56,8 @@ VD Promise là 1 Push system
 - BehaviorSubject là một loại Subject đặc biệt, có khả năng lưu trữ giá trị mới nhất và phát giá trị đó cho những người đăng ký mới ngay lập tức khi họ subscribe.
 - BehaviorSubject luôn giữ một giá trị nội bộ, và khi có người đăng ký, họ sẽ nhận ngay giá trị mới nhất (nếu có).
 - Cần cung cấp một giá trị khởi tạo khi tạo BehaviorSubject.
+- BehaviorSubject không biết nội dung của mảng hoặc object đã thay đổi, trừ khi bạn gọi next() để phát một giá trị mới.
+
 
 - Đối với Behavior Subject các value là read only (ko thể ghi đè giá trị cũ) vì vậy cần dùng .next để phát ra giá trị mới 
 

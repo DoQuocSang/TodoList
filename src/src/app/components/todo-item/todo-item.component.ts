@@ -1,9 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  inject,
-  Input,
-} from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Todo } from '../../models/todo';
@@ -31,6 +27,10 @@ export class TodoItemComponent {
 
   toggleEdit() {
     this.editable = !this.editable;
+  }
+
+  toggleItem() {
+    this.todoService.toggleItem(this.todoItem.id);
   }
 
   handleUpdateItem() {
