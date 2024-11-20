@@ -1,5 +1,1 @@
-export enum Tab {
-  Completed = 'completed',
-  Active = 'active',
-  All = 'all',
-}
+export type Tab = 'completed' | 'active' | 'all';
