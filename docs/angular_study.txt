@@ -24,3 +24,6 @@
 - Interceptor thường là các hàm có thể chạy cho mỗi yêu cầu và có thể ảnh hưởng đến nội dung và luồng yêu cầu và phản hồi tổng thể. Có thể cài đặt nhiều interceptor, tạo thành một chuỗi interceptor trong đó mỗi interceptor xử lý yêu cầu hoặc phản hồi trước khi chuyển tiếp đến interceptor tiếp theo trong chuỗi.
 - Có 2 dạng Interceptor: funtional (nên dùng vì nó có những hành vi dễ dự đoán) và DI-based
 - Hầu hết HttpRequest và HttpResponse là bất biến và Interceptor cũng ko thể thay đổi trực dtiếp chúng. Vì vậy cần dùng .clone() để chỉnh sửa chúng
+
+- @Injectable({ providedIn: 'root' }) dùng để đăng ký service ở cấp độ root của ứng dụng
+- Đảm bảo chỉ có 1 instance được tạo ra và dùng chung cho toàn bộ ứng dụng 
