@@ -2,11 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { Observable } from 'rxjs';
-
 import { Tab } from '../../models/tab';
-import { Todo } from '../../models/todo';
-import { TodoService } from '../../services/todo.service';
+import { TodosStore } from '../../store/todos.store';
 import { TodoItemComponent } from '../todo-item/todo-item.component';
 
 @Component({
@@ -14,6 +11,7 @@ import { TodoItemComponent } from '../todo-item/todo-item.component';
   standalone: true,
   imports: [TodoItemComponent, CommonModule, FormsModule],
   templateUrl: './todo-panel.component.html',
+  providers: [TodosStore],
 })
 export class TodoPanelComponent {
   // @Input({ required: true }) todoList!: Todo[];
@@ -21,27 +19,24 @@ export class TodoPanelComponent {
 
   inputTodo: string = '';
 
-  todoService: TodoService = inject(TodoService);
-  filteredItems$: Observable<Todo[]> = this.todoService.filteredItems$;
+  todosStore: TodosStore = inject(TodosStore);
+
+  vm$ = this.todosStore.vm$;
 
   ngOnInit() {
-    this.todoService.loadData();
+    this.todosStore.loadData();
   }
 
-  // get filteredItems() {
-  //   return this.todoService.filteredItems;
-  // }
-
   changeCurrentTab(filterType: Tab) {
-    this.todoService.setTabFilter(filterType);
+    this.todosStore.setTabFilter(filterType);
   }
 
   handleCreateItem() {
-    this.todoService.createNewItem(this.inputTodo);
+    this.todosStore.addItem(this.inputTodo);
     this.inputTodo = '';
   }
 
   handleDeleteAllCheckedItems() {
-    this.todoService.deleteAllCheckedItems();
+    this.todosStore.deleteAllCheckedItems();
   }
 }

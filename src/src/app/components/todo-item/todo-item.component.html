@@ -6,7 +6,7 @@
     name=""
     type="checkbox"
     [checked]="todoItem.completed"
-    (change)="this.todoService.toggleItem(todoItem.id)"
+    (change)="toggleItem()"
     [id]="todoItem.id"
     class="relative peer forced-colors:appearance-auto appearance-none cursor-pointer w-5 h-5 bg-red-100 rounded border-none focus:ring-0 focus:ring-transparent checked:bg-emerald-500 transition-all duration-150 ease-in-out"
   />
@@ -40,6 +40,7 @@
   <input
     *ngIf="editable"
     (keyup.enter)="handleUpdateItem()"
+    (keyup.escape)="toggleEdit()"
     [(ngModel)]="inputName"
     class="flex-1 font-semibold text-base px-4 py-2 border-2 border-teal-500 rounded-lg focus:outline-none focus:border-teal-500 transition-all duration-150 ease-in-out"
   />

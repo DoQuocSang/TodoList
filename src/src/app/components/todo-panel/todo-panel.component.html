@@ -1,83 +1,85 @@
-<div class="flex flex-col justify-center gap-4 my-8">
-  <div class="flex item-center rounded-lg shadow-lg bg-white text-slate-700">
-    <button
-      *ngIf="!todoService.isEmptyTodoList()"
-      (click)="todoService.completeAllItems()"
-      class="px-4"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="2.5"
-        stroke="currentColor"
-        class="size-6"
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="flex flex-col justify-center gap-4 my-8">
+    <div class="flex item-center rounded-lg shadow-lg bg-white text-slate-700">
+      <button
+        *ngIf="!todosStore.isEmptyTodoList()"
+        (click)="todosStore.completeAllItems()"
+        class="px-4"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="m19.5 8.25-7.5 7.5-7.5-7.5"
-        />
-      </svg>
-    </button>
-    <input
-      type="text"
-      name="main-input"
-      class="px-4 py-4 w-full focus:ring-2 rounded-lg focus:ring-red-500 border-none transition-all duration-150 ease-in"
-      placeholder="What need to be done?"
-      [(ngModel)]="inputTodo"
-      (keyup.enter)="handleCreateItem()"
-    />
-  </div>
-
-  <div
-    *ngIf="!todoService.isEmptyTodoList()"
-    class="w-full bg-white shadow-lg rounded-lg p-4 border-b-4 border-red-500"
-  >
-    <app-todo-item
-      [todoItem]="item"
-      *ngFor="let item of filteredItems$ | async"
-    ></app-todo-item>
-
-    <div class="flex items-center justify-between pt-4">
-      <p class="text-sm flex justify-center items-center gap-2">
-        <span class="text-red-500 font-bold text-xl">
-          {{ todoService.getNumberItemsLeft() }}
-        </span>
-        item left
-      </p>
-
-      <div class="space-x-2">
-        <button
-          (click)="changeCurrentTab('all')"
-          class="text-sm text-slate-700 rounded-lg hover:text-white hover:bg-red-500 px-2 py-1 transition-all duration-150 ease-in"
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2.5"
+          stroke="currentColor"
+          class="size-6"
         >
-          All
-        </button>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m19.5 8.25-7.5 7.5-7.5-7.5"
+          />
+        </svg>
+      </button>
+      <input
+        type="text"
+        name="main-input"
+        class="px-4 py-4 w-full focus:outline-none focus:ring-2 rounded-lg focus:ring-red-500 border-none transition-all duration-150 ease-in"
+        placeholder="What need to be done?"
+        [(ngModel)]="inputTodo"
+        (keyup.enter)="handleCreateItem()"
+      />
+    </div>
+
+    <div
+      class="w-full bg-white shadow-lg rounded-lg p-4 border-b-4 border-red-500"
+      *ngIf="!todosStore.isEmptyTodoList()"
+    >
+      <app-todo-item
+        [todoItem]="item"
+        *ngFor="let item of vm.filteredItems"
+      ></app-todo-item>
+
+      <div class="flex items-center justify-between pt-4">
+        <p class="text-sm flex justify-center items-center gap-2">
+          <span class="text-red-500 font-bold text-xl">
+            {{ vm.activeCount }}
+          </span>
+          item left
+        </p>
+
+        <div class="space-x-2">
+          <button
+            (click)="changeCurrentTab('all')"
+            class="text-sm text-slate-700 rounded-lg hover:text-white hover:bg-red-500 px-2 py-1 transition-all duration-150 ease-in"
+          >
+            All
+          </button>
+          <button
+            (click)="changeCurrentTab('active')"
+            class="text-sm text-slate-700 rounded-lg hover:text-white hover:bg-gray-500 px-2 py-1 transition-all duration-150 ease-in"
+          >
+            Active
+          </button>
+          <button
+            (click)="changeCurrentTab('completed')"
+            class="text-sm text-slate-700 rounded-lg hover:text-white hover:bg-emerald-500 px-2 py-1 transition-all duration-150 ease-in"
+          >
+            Completed
+          </button>
+        </div>
+
         <button
-          (click)="changeCurrentTab('active')"
-          class="text-sm text-slate-700 rounded-lg hover:text-white hover:bg-gray-500 px-2 py-1 transition-all duration-150 ease-in"
+          (click)="handleDeleteAllCheckedItems()"
+          [class]="
+            todosStore.checkCompletedItems()
+              ? 'text-sm text-slate-700 rounded-lg hover:text-white hover:bg-red-500 px-2 py-1 transition-all duration-150 ease-in'
+              : 'invisible'
+          "
         >
-          Active
-        </button>
-        <button
-          (click)="changeCurrentTab('completed')"
-          class="text-sm text-slate-700 rounded-lg hover:text-white hover:bg-emerald-500 px-2 py-1 transition-all duration-150 ease-in"
-        >
-          Completed
+          Clear Completed
         </button>
       </div>
-
-      <button
-        (click)="handleDeleteAllCheckedItems()"
-        [class]="
-          todoService.checkCompletedItems()
-            ? 'text-sm text-slate-700 rounded-lg hover:text-white hover:bg-red-500 px-2 py-1 transition-all duration-150 ease-in'
-            : 'invisible'
-        "
-      >
-        Clear Completed
-      </button>
     </div>
   </div>
-</div>
+</ng-container>

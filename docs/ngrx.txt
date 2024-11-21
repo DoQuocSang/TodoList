@@ -16,3 +16,6 @@
 - debounce dùng để trì hoãn sự phát ra giá trị mới từ observable.
 - Giá trị chỉ được phát sau một thời gian ngừng thay đổi, thay vì mỗi khi có sự thay đổi.
 - effect dùng để thực hiện các tác vụ phụ, các tác vụ này thường là các hành động không liên quan trực tiếp đến việc thay đổi trạng thái của store mà cần phải thực thi khi có sự thay đổi trong state hoặc khi có sự kiện từ observables.
+
+- setState sẽ ghi đè state với giá trị được cấp, trừ khi dùng dùng callback để tự định nghĩa cách update dữ liệu
+- patchState sẽ chỉ cập nhật thuộc tính được cấp
