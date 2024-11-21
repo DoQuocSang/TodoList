@@ -23,10 +23,6 @@ export class TodoPanelComponent {
 
   vm$ = this.todosStore.vm$;
 
-  ngOnInit() {
-    this.todosStore.loadData();
-  }
-
   changeCurrentTab(filterType: Tab) {
     this.todosStore.setTabFilter(filterType);
   }

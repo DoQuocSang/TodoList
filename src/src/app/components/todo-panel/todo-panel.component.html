@@ -2,7 +2,7 @@
   <div class="flex flex-col justify-center gap-4 my-8">
     <div class="flex item-center rounded-lg shadow-lg bg-white text-slate-700">
       <button
-        *ngIf="!todosStore.isEmptyTodoList()"
+        *ngIf="vm.filteredItems?.length"
         (click)="todosStore.completeAllItems()"
         class="px-4"
       >
@@ -33,14 +33,16 @@
 
     <div
       class="w-full bg-white shadow-lg rounded-lg p-4 border-b-4 border-red-500"
-      *ngIf="!todosStore.isEmptyTodoList()"
     >
       <app-todo-item
         [todoItem]="item"
         *ngFor="let item of vm.filteredItems"
       ></app-todo-item>
 
-      <div class="flex items-center justify-between pt-4">
+      <div
+        class="flex items-center justify-between"
+        [ngClass]="vm.filteredItems.length > 0 ? 'mt-4' : ''"
+      >
         <p class="text-sm flex justify-center items-center gap-2">
           <span class="text-red-500 font-bold text-xl">
             {{ vm.activeCount }}

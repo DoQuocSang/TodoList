@@ -9,28 +9,28 @@ import { ComponentStore } from '@ngrx/component-store';
 import { Tab } from '../models/tab';
 import { Todo } from '../models/todo';
 
-interface TodosState {
+interface State {
   todos: Todo[];
   filterType: Tab;
+  limit: number;
 }
 
-const initialState = {
+const initialState: State = {
   todos: [],
-  filterType: 'all' as Tab,
+  filterType: 'all',
+  limit: 10,
 };
 
 @Injectable({ providedIn: 'root' })
-export class TodosStore extends ComponentStore<TodosState> {
+export class TodosStore extends ComponentStore<State> {
   constructor() {
     super(initialState);
+    this.loadData();
   }
 
   http: HttpClient = inject(HttpClient);
 
-  private _limit: number = 5;
-
   readonly vm$ = this.select(({ todos, filterType }) => {
-    console.log(todos);
     let filteredItems: Todo[] = todos;
 
     switch (filterType) {
@@ -56,7 +56,7 @@ export class TodosStore extends ComponentStore<TodosState> {
       tap(
         this.http
           .get<Todo[]>('https://jsonplaceholder.typicode.com/todos', {
-            params: { _limit: this._limit },
+            params: { _limit: this.state().limit },
           })
           .pipe(
             tap({
@@ -123,10 +123,6 @@ export class TodosStore extends ComponentStore<TodosState> {
   // ================================================
   // HELPER FUNCTION
   // ================================================
-  readonly isEmptyTodoList = () => {
-    return this.state().todos.length === 0;
-  };
-
   readonly getNumberItemsLeft = () => {
     return this.state().todos.filter((item) => !item.completed).length;
   };
