@@ -22,7 +22,7 @@ A simple Todo List application using Angular. This application allows users to m
 
 Make sure you have the following installed:
 
-- [Node.js](https://nodejs.org/) (version >= 14.x)
+- [Node.js](https://nodejs.org/) (version >= 22.9.0)
 - [Angular](https://angular.io/cli) (version >= 18.2.11)
 - [TailwindCss](https://tailwindcss.io/cli) (version >= 3.4.15)
 - A code editor (e.g., [VS Code](https://code.visualstudio.com/))
