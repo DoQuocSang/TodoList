@@ -2,9 +2,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 import { tap } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 
 import { ComponentStore } from '@ngrx/component-store';
-import { tapResponse } from '@ngrx/operators';
 
 import { Tab } from '../models/tab';
 import { Todo } from '../models/todo';
@@ -19,33 +19,18 @@ const initialState = {
   filterType: 'all' as Tab,
 };
 
-const demoState = {
-  todos: [
-    {
-      id: '1abc',
-      title: 'This is demo 1',
-      completed: false,
-    },
-    {
-      id: '2abc',
-      title: 'This is demo 2',
-      completed: true,
-    },
-  ],
-  filterType: 'all' as Tab,
-};
-
 @Injectable({ providedIn: 'root' })
 export class TodosStore extends ComponentStore<TodosState> {
-  http: HttpClient = inject(HttpClient);
-
-  private _limit = 5;
-
   constructor() {
-    super(demoState);
+    super(initialState);
   }
 
+  http: HttpClient = inject(HttpClient);
+
+  private _limit: number = 5;
+
   readonly vm$ = this.select(({ todos, filterType }) => {
+    console.log(todos);
     let filteredItems: Todo[] = todos;
 
     switch (filterType) {
@@ -62,6 +47,10 @@ export class TodosStore extends ComponentStore<TodosState> {
     return { filteredItems, filterType, activeCount };
   });
 
+  // ================================================
+  // CRUD FUNCTION
+  // ================================================
+
   readonly loadData = this.effect<void>((source$) =>
     source$.pipe(
       tap(
@@ -70,21 +59,97 @@ export class TodosStore extends ComponentStore<TodosState> {
             params: { _limit: this._limit },
           })
           .pipe(
-            tapResponse({
+            tap({
               next: (data) => this.patchState({ todos: data }),
               error: (error: HttpErrorResponse) => console.log(error),
-              finalize: () => {},
             })
           )
       )
     )
   );
-  // loadData() {
-  //   this.http
-  //     .get<Todo[]>('https://jsonplaceholder.typicode.com/todos', {
-  //       params: { _limit: this._limit },
-  //     })
-  //     .pipe(tap((data) => {}))
-  //     .subscribe();
-  // }
+
+  readonly toggleItem = this.updater((state, id: string) => ({
+    ...state,
+    todos: state.todos.map((item) =>
+      item.id === id ? { ...item, completed: !item.completed } : { ...item }
+    ),
+  }));
+
+  readonly setTabFilter = this.updater((state, tab: Tab) => ({
+    ...state,
+    filterType: tab,
+  }));
+
+  readonly completeAllItems = this.updater((state) => ({
+    ...state,
+    todos: state.todos.map((item) => {
+      if (
+        this.getNumberItemsCompleted() === 0 ||
+        this.getNumberItemsLeft() === 0 ||
+        !item.completed
+      ) {
+        return {
+          ...item,
+          completed: !item.completed,
+        };
+      } else {
+        return item;
+      }
+    }),
+  }));
+
+  readonly addItem = this.updater((state, input: string) => ({
+    ...state,
+    todos: this.createNewItem(input),
+  }));
+
+  readonly updateItem = this.updater((state, updateValue: Todo) => ({
+    ...state,
+    todos: [...state.todos].map((item) => {
+      return item.id === updateValue.id ? (item = updateValue) : item;
+    }),
+  }));
+
+  readonly deleteItem = this.updater((state, id: string) => ({
+    ...state,
+    todos: [...state.todos].filter((item) => item.id !== id),
+  }));
+
+  readonly deleteAllCheckedItems = this.updater((state) => ({
+    ...state,
+    todos: [...state.todos].filter((item) => !item.completed),
+  }));
+
+  // ================================================
+  // HELPER FUNCTION
+  // ================================================
+  readonly isEmptyTodoList = () => {
+    return this.state().todos.length === 0;
+  };
+
+  readonly getNumberItemsLeft = () => {
+    return this.state().todos.filter((item) => !item.completed).length;
+  };
+
+  readonly getNumberItemsCompleted = () => {
+    return this.state().todos.filter((item) => item.completed).length;
+  };
+
+  readonly checkCompletedItems = () => {
+    return this.state().todos.filter((item) => item.completed).length > 0;
+  };
+
+  readonly createNewItem = (input: string) => {
+    if (input === '') {
+      return [...this.state().todos];
+    }
+
+    const newItems: Todo = {
+      id: uuidv4(),
+      title: input,
+      completed: false,
+    };
+
+    return [...this.state().todos, newItems];
+  };
 }

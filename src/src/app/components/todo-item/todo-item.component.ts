@@ -3,7 +3,7 @@ import { Component, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Todo } from '../../models/todo';
-import { TodoService } from '../../services/todo.service';
+import { TodosStore } from '../../store/todos.store';
 
 @Component({
   selector: 'app-todo-item',
@@ -19,7 +19,7 @@ export class TodoItemComponent {
   editable: boolean = false;
   inputName: string = '';
 
-  todoService: TodoService = inject(TodoService);
+  todosStore: TodosStore = inject(TodosStore);
 
   ngOnInit(): void {
     this.inputName = this.todoItem.title;
@@ -30,17 +30,16 @@ export class TodoItemComponent {
   }
 
   toggleItem() {
-    this.todoService.toggleItem(this.todoItem.id);
+    this.todosStore.toggleItem(this.todoItem.id);
   }
 
   handleUpdateItem() {
-    // console.log((e.target as HTMLParagraphElement).textContent);
     this.toggleEdit();
     this.todoItem.title = this.inputName;
-    this.todoService.updateItem(this.todoItem);
+    this.todosStore.updateItem(this.todoItem);
   }
 
   handleDeleteItem() {
-    this.todoService.deleteItem(this.todoItem.id);
+    this.todosStore.deleteItem(this.todoItem.id);
   }
 }

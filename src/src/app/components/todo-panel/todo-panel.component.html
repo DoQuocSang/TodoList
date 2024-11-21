@@ -2,8 +2,8 @@
   <div class="flex flex-col justify-center gap-4 my-8">
     <div class="flex item-center rounded-lg shadow-lg bg-white text-slate-700">
       <button
-        *ngIf="!todoService.isEmptyTodoList()"
-        (click)="todoService.completeAllItems()"
+        *ngIf="!todosStore.isEmptyTodoList()"
+        (click)="todosStore.completeAllItems()"
         class="px-4"
       >
         <svg
@@ -24,7 +24,7 @@
       <input
         type="text"
         name="main-input"
-        class="px-4 py-4 w-full focus:ring-2 rounded-lg focus:ring-red-500 border-none transition-all duration-150 ease-in"
+        class="px-4 py-4 w-full focus:outline-none focus:ring-2 rounded-lg focus:ring-red-500 border-none transition-all duration-150 ease-in"
         placeholder="What need to be done?"
         [(ngModel)]="inputTodo"
         (keyup.enter)="handleCreateItem()"
@@ -32,8 +32,8 @@
     </div>
 
     <div
-      *ngIf="!todoService.isEmptyTodoList()"
       class="w-full bg-white shadow-lg rounded-lg p-4 border-b-4 border-red-500"
+      *ngIf="!todosStore.isEmptyTodoList()"
     >
       <app-todo-item
         [todoItem]="item"
@@ -72,7 +72,7 @@
         <button
           (click)="handleDeleteAllCheckedItems()"
           [class]="
-            todoService.checkCompletedItems()
+            todosStore.checkCompletedItems()
               ? 'text-sm text-slate-700 rounded-lg hover:text-white hover:bg-red-500 px-2 py-1 transition-all duration-150 ease-in'
               : 'invisible'
           "
